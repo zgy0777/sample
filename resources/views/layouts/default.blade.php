@@ -11,6 +11,9 @@
 @include('layouts._header')
 
 <div class="container">
+    {{--引入消息错误提醒--}}
+    @include('shared._messages')
+
     @yield('content')
 
     {{--脚部--}}

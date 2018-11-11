@@ -17,14 +17,15 @@ class UsersController extends Controller
     //show显示用户个人信息
     public function show(User $user)
     {
-        return view('users.show',compact('user'));
+        return view('users.show', compact('user'));
     }
 
     //创建行为
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'name'  => 'required|max:50',
+
+        $this->validate($request, [
+            'name' => 'required|max:50',
             'email' => 'required|email|unique:users|max:255',
             'password' => 'required|confirmed|min:6'
         ]);
@@ -35,8 +36,8 @@ class UsersController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        session()->flash('success','欢迎光临');
-        return redirect()->route('users.show',[$user]);
+        session()->flash('success', '欢迎光临');
+        return redirect()->route('users.show', [$user]);
     }
 
 }

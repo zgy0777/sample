@@ -10,6 +10,8 @@
 | the IoC container for the system binding all of the various parts.
 |
 */
+//自动引入助手函数
+require __DIR__.'/helpers.php';
 
 $app = new Illuminate\Foundation\Application(
     realpath(__DIR__.'/../')

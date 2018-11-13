@@ -7,7 +7,7 @@
                     {{--Auth静态代理，模版能调用--}}
                     {{--检测auth是否有数据，相当于防翻墙--}}
                     @if (Auth::check())
-                        <li><a href="#">用户列表</a></li>
+                        <li><a href="{{ route('users.index') }}">用户列表</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 {{--填写用户名--}}
@@ -16,7 +16,7 @@
                             <ul class="dropdown-menu">
                                 {{--进入个人信息页，传入id--}}
                                 <li><a href="{{ route('users.show', Auth::user()->id) }}">个人中心</a></li>
-                                <li><a href="#">编辑资料</a></li>
+                                <li><a href="{{ route('users.edit', Auth::user()->id) }}">编辑资料</a></li>
                                 <li class="divider"></li>
                                 <li>
                                     <a id="logout" href="#">

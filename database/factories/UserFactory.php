@@ -14,10 +14,20 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\Models\User::class, function (Faker $faker) {
+
+    $date_time = $faker->date. '' .$faker->time;
+    //让所有用户密码设置为相同
+    //密码设置为静态共享变量，下方生成一次后存入变量，再次设置时三元运算，获取共享变量
+    static $password;
+
     return [
         'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
+        'email' => $faker->safeEmail,
+        'password' => $password ? : $password=bcrypt('123123'), // secret
         'remember_token' => str_random(10),
+        'is_admin' => false,
+        //注册时间和更新时间默认为同一个
+        'created_at' => $date_time,
+        'updated_at' => $date_time,
     ];
 });

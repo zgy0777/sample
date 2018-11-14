@@ -31,3 +31,9 @@ Route::delete('/logout','SessionsController@destroy')->name('logout');
 
 //邮件发送调试
 Route::get('signup/confirm/{token}','UsersController@confirmEmail')->name('confirm_email');
+//视图部分
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+//修改密码部分
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');

@@ -27,6 +27,19 @@ class User extends Authenticatable
         'password', 'remember_token','is_admin'
     ];
 
+    //模型入库前事件
+    public static function boot(){
+
+        parent::boot();
+
+        static::creating(function ($user){
+           $user->activation_token = str_random(30);
+        });
+
+    }
+
+
+
     //引入通用头像
     public function gravatar($size = '140')
     {

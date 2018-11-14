@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\AuthorizationException;
+use Mail;//引入mail接口
 
 class UsersController extends Controller
 {
@@ -15,7 +16,8 @@ class UsersController extends Controller
         //1.未登陆用户仅能访问首页/注册页
         $this->middleware('auth', [
             //黑名单，除了此处定义的方法外，其他方法均需要登陆才可以认证
-            'except' => ['show', 'create', 'store','index']
+            //临时添加confirmEmail，未激活的用户可以访问激活页面
+            'except' => ['show', 'create', 'store','index','confirmEmail']
         ]);
 
         //只允许未登陆用户访问注册页（同时限制了已登陆用户无法访问注册页
@@ -54,10 +56,13 @@ class UsersController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
+        //暂时修改，
+        //Auth::login($user);
 
-        Auth::login($user);
+        //测试邮件发送，登陆时判断是否已激活，未激活则需要前去激活先
+        $this->sendEmailConfirmationTo($user);
 
-        session()->flash('success', '欢迎，您将在这里开启一段新旅程');
+        session()->flash('success', '验证邮件已发送到你的注册邮箱上，请注意查收');
         return redirect()->route('users.show', [$user]);
     }
 
@@ -119,5 +124,38 @@ class UsersController extends Controller
         session()->flash('success','成功删除用户');
         return back();
     }
+
+    //发送邮件方法
+    public function sendEmailConfirmationTo($user)
+    {
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = 'admin@qq.com';
+        $name = 'Xzibit';
+        $to = $user->email;
+        $subject = '感谢注册应用，请确定你的邮箱';
+
+        Mail::send($view,$data,function ($message) use($from,$name,$to,$subject){
+            $message->from($from,$name)->to($to)->subject($subject);
+        });
+    }
+
+
+    //激活功能
+    public function confirmEmail($token)
+    {
+        $user = User::where('activation_token',$token)->firstOrFail();
+
+        $user->activated = true;
+        $user->activation_token = null;
+        $user->save();
+
+        Auth::login($user);
+        session()->flash('success','恭喜你，激活成功');
+        return redirect()->route('users.show',[$user]);
+
+    }
+
+
 
 }

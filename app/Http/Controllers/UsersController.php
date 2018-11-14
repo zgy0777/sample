@@ -10,6 +10,7 @@ use Mail;//引入mail接口
 
 class UsersController extends Controller
 {
+    //控制器中间件
     public function __construct()
     {
 
@@ -28,17 +29,20 @@ class UsersController extends Controller
 
     }
 
-
     //创建用户视图
     public function create()
     {
         return view('users.create');
     }
 
-    //show显示用户个人信息
+    //show显示用户个人信息，并且读取用户所发布的微博
     public function show(User $user)
     {
-        return view('users.show', compact('user'));
+        $statuses = $user->statuses()
+            ->orderBy('created_at','desc')
+            ->paginate('30');
+
+        return view('users.show', compact('user','statuses'));
     }
 
     //创建行为
@@ -66,6 +70,7 @@ class UsersController extends Controller
         return redirect()->route('users.show', [$user]);
     }
 
+    //更新视图
     public function edit(User $user)
     {
         //1。判断用户是否翻墙，当前用户仅能编辑自身
@@ -81,6 +86,7 @@ class UsersController extends Controller
         return view('users.edit', compact('user'));
     }
 
+    //更新行为
     public function update(User $user, Request $request)
     {
         $this->validate($request, [
@@ -110,6 +116,7 @@ class UsersController extends Controller
 
     }
 
+    //主页
     public function index()
     {
         $users = User::paginate(10);
@@ -138,7 +145,6 @@ class UsersController extends Controller
         });
     }
 
-
     //激活功能
     public function confirmEmail($token)
     {
@@ -154,6 +160,7 @@ class UsersController extends Controller
 
     }
 
+    //
 
 
 }

@@ -52,4 +52,17 @@ class User extends Authenticatable
         return "http://www.gravatar.com/avatar/$hash?s=$size";
     }
 
+    //一对多模型关联，取出用户所发布的微博
+    public function statuses()
+    {
+        return $this->hasMany(Status::class,'user_id','id');
+    }
+
+    //取出用户所有发布的微博，并以倒序显示
+    public function feed()
+    {
+        return $this->statuses()->orderBy('created_at','desc');
+    }
+
+
 }

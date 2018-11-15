@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@yield('title', 'Sample App') - Laravel 入门教程</title>
+    <title>@yield('title', 'Sample App') - Laravel </title>
     {{--引入public对应的css--}}
     {{--本质上是sass先编译再写入到app.css中--}}
     <link rel="stylesheet" href="/css/app.css">

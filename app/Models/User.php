@@ -38,13 +38,11 @@ class User extends Authenticatable
         });
 
     }
-
+    //发送邮件
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPassword($token));
     }
-
-
     //引入通用头像
     public function gravatar($size = '140')
     {
@@ -55,7 +53,7 @@ class User extends Authenticatable
     //一对多模型关联，取出用户所发布的微博
     public function statuses()
     {
-        return $this->hasMany(Status::class,'user_id','id');
+        return $this->hasMany(\App\Models\Status::class,'user_id','id');
     }
 
     //取出用户所有发布的微博，并以倒序显示

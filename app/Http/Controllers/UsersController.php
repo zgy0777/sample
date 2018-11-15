@@ -38,9 +38,22 @@ class UsersController extends Controller
     //show显示用户个人信息，并且读取用户所发布的微博
     public function show(User $user)
     {
+        //select * from statuses where statuses.user_id = 1(当前$user主键);
+        //建立关联，查询关联模型，并调用关联模型的外键作为查询条件
+        //dd($user);
         $statuses = $user->statuses()
-            ->orderBy('created_at','desc')
-            ->paginate('30');
+        ->orderBy('created_at','desc')
+        ->paginate('30');
+
+
+        /*$user = \App\Models\User::find(1);
+        $content = $user->statuses();
+        dd($content);*/
+
+         /*$statuses = $user->with('statuses')
+        ->orderBy('created_at','desc')
+        ->paginate('30')*/;
+         //dd($statuses);
 
         return view('users.show', compact('user','statuses'));
     }

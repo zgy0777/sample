@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="col-md-12">
-                {{--统计是否哦与微博梳，有则显示--}}
+                {{--统计是否有微博梳，有则显示--}}
                 @if (count($statuses) > 0)
                     <ol class="statuses">
                         @foreach ($statuses as $status)
